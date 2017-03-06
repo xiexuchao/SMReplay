@@ -71,11 +71,12 @@ void replay(char *configName)
 		reqTime=req->time;
 		nowTime=time_elapsed(initTime);
 #ifdef  __B_Zhang__
-        if(nowTime-execTime > config->exec)
+        if(nowTime-execTime > config->exec*1000000)
         {
             sleep(config->idle);
 		    execTime=time_elapsed(initTime);
         }
+	nowTime=time_elapsed(initTime);
 #endif
 
 		while(nowTime < reqTime)
