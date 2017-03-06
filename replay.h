@@ -34,6 +34,8 @@ struct config_info{
 	char device[64];
 	char traceFileName[64];
 	char logFileName[64];
+    unsigned int exec;
+    unsigned int idle;
 };
 
 struct req_info{
@@ -41,6 +43,7 @@ struct req_info{
 	long long lba;
 	unsigned int size;
 	unsigned int type;
+    long long waitTime;
 	struct req_info *next;
 };
 
@@ -66,7 +69,8 @@ struct aiocb_info{
 	//int             aio_lio_opcode; /* Operation to be performed;lio_listio() only */
 	//
 	struct req_info* req;
-	long long beginTime;
+	long long beginTime_submit;
+	long long beginTime_issue;
 	struct trace_info *trace;
 };
 
@@ -77,7 +81,7 @@ void trace_read(struct config_info *config,struct trace_info *trace);
 long long time_now();
 long long time_elapsed(long long begin);
 static void handle_aio(sigval_t sigval);
-static void submit_aio(int fd, void *buf,struct req_info *req,struct trace_info *trace);
+static void submit_aio(int fd, void *buf,struct req_info *req,struct trace_info *trace,long long initTime);
 static void init_aio();
 
 //queue.c
